@@ -9,17 +9,35 @@ int main() {
     cout << "Welcome to Blind Man's Bluff" << endl << endl;
     bool play, invalid, guessedHigher;
     string response;
+    int cardsLeft = 52;
+    Card user;
+    Card computer;
     int compValue, userValue, nWin = 0, nLoss = 0, nTie = 0;
     srand(time(NULL));
+
+    //create decks
+    Deck playing;
+    Deck discard;
+
+    playing.populate();
+    playing.shuffle();
 
     play = true;
     while(play) {
         // assign values to computer and user
-        compValue = rand() % 52;
-        userValue = rand() % 52;
+        //compValue = rand() % 52;
+        //userValue = rand() % 52;
+        computer = playing.pickCard();
+        discard.addCard(computer);
+
+        user = playing.pickCard();
+        discard.addCard(user);
+
+        playing.shuffle();
 
         // get user's bet
-        cout << "Computer's value is " << compValue << endl;
+        cout << "Computer's value is ";
+        cout << computer.CardPrint() << endl;
         invalid = true;
         while(invalid) {
             cout << "Do you think your number is higher or lower? (H/L)" << endl;
@@ -37,20 +55,23 @@ int main() {
                 cout << "Invalid response..." << endl;
                 invalid = true;
             }
+            cardsLeft = cardsLeft - 2;
         }
 
         // determine outcome
-        if((compValue < userValue && guessedHigher) || (compValue > userValue && !guessedHigher)) {
+        if((computer < user && guessedHigher) || (computer > user && !guessedHigher)) {
             cout << "Great! You're right:" << endl;
             nWin++;
-        } else if((compValue > userValue && guessedHigher) || (compValue < userValue && !guessedHigher)) {
+        } else if((computer > user && guessedHigher) || (computer < user && !guessedHigher)) {
             cout << "Sorry, you're wrong:" << endl;
             nLoss++;
         } else {
             cout << "It's a tie:" << endl;
             nTie++;
         }
-        cout << "\tyour value is " << userValue << endl;
+        cout << "\tYour value is ";
+        cout << user.CardPrint() << endl;
+        discard.PrintDiscard();
 
         // ask user to play again
         invalid = true;
@@ -70,6 +91,11 @@ int main() {
                 cout << "Invalid response..." << endl;
                 invalid = true;
             }
+        }
+        if(cardsLeft <= 0)
+        {
+            invalid = false;
+            break;
         }
     }
 

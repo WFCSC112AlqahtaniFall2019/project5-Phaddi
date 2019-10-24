@@ -8,8 +8,17 @@ const string ranks[] = {"Ace","2","3","4","5","6","7","8","9","10","Jack","King"
 // suits are ordered alphabetically
 const string suits[] = {"Clubs","Diamonds","Hearts","Spades"};
 
-class Card {
-
+class Card
+{
+public:
+    Card();
+    Card(int rank, int suit);
+    bool operator>(Card computer); //checks to see who wins (true = user) (false = comp)
+    bool operator<(Card computer);
+    string CardPrint();
+private:
+    int rank;
+    int suit;
 };
 
 
